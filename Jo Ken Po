@@ -1,0 +1,71 @@
+let playerWins = 0;
+let playerLosses = 0;
+let playerTies = 0;
+let rounds = 0;
+const maxRounds = 5;
+
+function playGame() {
+    if (rounds >= maxRounds) {
+        alert("A partida terminou! Clique em 'Nova Partida' para jogar novamente.");
+        return;
+    }
+    
+    const playerChoice = document.getElementById("playerChoice").value.toLowerCase();
+    const choices = ['pe', 'te', 'pa'];
+    
+    if (!choices.includes(playerChoice)) {
+        alert("Escolha inválida! Digite Pe, Te ou Pa.");
+        return;
+    }
+    
+    const computerChoice = choices[Math.floor(Math.random() * 3)];
+    const result = determineWinner(playerChoice, computerChoice);
+    
+    document.getElementById("result").innerText = `Você escolheu: ${playerChoice.toUpperCase()}, Computador escolheu: ${computerChoice.toUpperCase()}. ${result}`;
+    
+    rounds++;
+    if (rounds >= maxRounds) {
+        document.getElementById("scoreboard").style.display = "block";
+    }
+}
+
+function determineWinner(player, computer) {
+    if (player === computer) {
+        playerTies++;
+        updateScoreboard();
+        return "Deu empate! Pensamos igual!";
+    }
+    
+    if ((player === 'pe' && computer === 'te') ||
+        (player === 'te' && computer === 'pa') ||
+        (player === 'pa' && computer === 'pe')) {
+        playerWins++;
+        updateScoreboard();
+        return "Parabéns, você venceu!";
+    } else {
+        playerLosses++;
+        updateScoreboard();
+        return "Você perdeu! Tente de novo.";
+    }
+}
+
+function resetGame() {
+    playerWins = 0;
+    playerLosses = 0;
+    playerTies = 0;
+    rounds = 0;
+    document.getElementById("result").innerText = "";
+    document.getElementById("scoreboard").style.display = "none";
+    updateScoreboard();
+}
+
+function startNewGame() {
+    resetGame();
+    alert("Nova partida iniciada! Você tem 5 tentativas.");
+}
+
+function updateScoreboard() {
+    document.getElementById("wins").innerText = playerWins;
+    document.getElementById("losses").innerText = playerLosses;
+    document.getElementById("ties").innerText = playerTies;
+}
